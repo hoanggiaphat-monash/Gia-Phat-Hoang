@@ -1,89 +1,36 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 700,
-  "height": 400,
-  "title": {
-    "text": "Fire Brightness vs FRP by Confidence Level (2019)",
-    "subtitle": "Scatter plot showing correlation between brightness and FRP • Sort by the confidence level",
-    "anchor": "start"
-  },
-  "params": [
-    {
-      "name": "ConfidenceSelect",
-      "value": "all",
-      "bind": {
-        "input": "select",
-        "options": ["all", "low", "nominal", "high"],
-        "labels": ["All", "Low", "Nominal", "High"],
-        "name": "Confidence: "
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": {"url": "data/sp500.csv"},
+  "vconcat": [{
+    "width": 480,
+    "mark": "area",
+    "encoding": {
+      "x": {
+        "field": "date",
+        "type": "temporal",
+        "scale": {"domain": {"param": "brush"}},
+        "axis": {"title": ""}
+      },
+      "y": {"field": "price", "type": "quantitative"}
+    }
+  }, {
+    "width": 480,
+    "height": 60,
+    "mark": "area",
+    "params": [{
+      "name": "brush",
+      "select": {"type": "interval", "encodings": ["x"]}
+    }],
+    "encoding": {
+      "x": {
+        "field": "date",
+        "type": "temporal"
+      },
+      "y": {
+        "field": "price",
+        "type": "quantitative",
+        "axis": {"tickCount": 3, "grid": false}
       }
     }
-  ],
-  "data": {
-    "url": "https://raw.githubusercontent.com/hoanggiaphat-monash/Gia-Phat-Hoang/2d44985f5cdf6a3db01eb50d121081e4faf0fcc7/fire_archive_M6_96619.csv",
-    "format": {"type": "csv"}
-  },
-  "transform": [
-    {"calculate": "toNumber(datum.brightness)", "as": "bright"},
-    {"calculate": "toNumber(datum.frp)", "as": "frp_num"},
-    {"calculate": "year(toDate(datum.acq_date))", "as": "year_num"},
-    {"filter": "datum.year_num == 2019"},
-    {"calculate": "datum.confidence < 40 ? 'low 0-40' : datum.confidence < 80 ? 'nominal 41-80' : 'high 81-100'", "as": "conf_level"},
-    {
-      "filter": "ConfidenceSelect == 'all' || datum.conf_level == ConfidenceSelect"
-    }
-  ],
-  "layer": [
-    {
-      "mark": {"type": "point", "filled": true, "opacity": 0.7},
-      "encoding": {
-        "x": {
-          "field": "bright",
-          "type": "quantitative",
-          "title": "Brightness (K)"
-        },
-        "y": {
-          "field": "frp_num",
-          "type": "quantitative",
-          "title": "FRP (MW)"
-        },
-        "color": {
-          "field": "conf_level",
-          "type": "nominal",
-          "title": "Confidence Level",
-          "scale": { 
-            "domain": ["low 0-40", "nominal 41-80", "high 81-100"],
-            "range": ["#fdae61", "#f46d43", "#4575b4"]
-            },
-            "sort": ["low", "nominal", "high"]
-        },
-        "tooltip": [
-          {"field": "acq_date", "type": "temporal", "title": "Date"},
-          {"field": "bright", "type": "quantitative", "title": "Brightness (K)"},
-          {"field": "frp_num", "type": "quantitative", "title": "FRP (MW)"},
-          {"field": "conf_level", "type": "nominal", "title": "Confidence"}
-        ]
-      }
-    },
-    {
-      "mark": {
-        "type": "text",
-        "text": "Higher FRP means more intense fire energy",
-        "x": 400,
-        "y": 40,
-        "align": "center",
-        "fontSize": 13,
-        "fontStyle": "italic",
-        "fontWeight": "bold",
-        "color": "firebrick"
-      }
-    },
-    {
-      "mark": {"type": "rule", "color": "gray", "strokeDash": [4, 4]},
-      "encoding": {
-        "x": {"datum": 320},
-        "y": {"datum": 0}
-      }
-    }
-  ]
+  }]
 }

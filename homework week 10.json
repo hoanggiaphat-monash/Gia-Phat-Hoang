@@ -41,7 +41,7 @@
         {"filter": "datum.year_num == 2019"},
         {"filter": "datum.lon >= 112 && datum.lon <= 154 && datum.lat >= -44 && datum.lat <= -10"},
         {"filter": "isFinite(datum.lon) && isFinite(datum.lat) && isFinite(datum.frp_num) && isFinite(datum.bright)"},
-        {"filter": "datum.frp_num >= MinFRP"}
+        {"filter": "datum.frp_num >= FRP"}
       ],
       "mark": {"type": "circle", "opacity": 0.8},
       "encoding": {
@@ -71,4 +71,5 @@
     }
   ]
 }
+
 

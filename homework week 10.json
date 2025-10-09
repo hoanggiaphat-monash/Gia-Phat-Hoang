@@ -12,7 +12,7 @@
 
   "params": [
     {
-      "name": "MinFRP",
+      "name": "FRP",
       "value": 0,
       "bind": {"input": "range", "min": 0, "max": 500, "step": 5}
     }
@@ -71,3 +71,4 @@
     }
   ]
 }
+

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FIT3179 — Week 10 Dashboard</title>
+  <subtittle>35325453 - Hoang Gia phat</subtitle>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 18px; color:#111; }
+    header h1 { margin: 0 0 6px 0; font-size: 20px; }
+    header p { margin: 0 0 18px 0; color:#444; }
+    .row { display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; }
+    #map { flex: 1 1 62%; min-width:900px; }
+    #other { flex: 1 1 34%; min-width:900px; }
+    .card { background: white; border-radius:6px; padding:10px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
+    figcaption { color:#666; font-size:13px; margin-top:6px; }
+    @media (max-width:900px){
+      .row { flex-direction: column; }
+      #map, #other { min-width: auto; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Week 10 — Dashboard</h1>
+    <p>Upper: map visualization. Lower: Scatter plot by confidence level (Task 1).</p>
+  </header>
+
+  <div class="row">
+    <div id="map" class="card"></div>
+    <div id="other" class="card"></div>
+  </div>
+
+  <script>
+    // --- PUT your visualization JSON URLs here ---
+    // Replace the strings below with your publicly accessible GitHub raw JSON URLs
+    // exactly as: "put link visualization here"
+    const mapLink = "https://raw.githubusercontent.com/hoanggiaphat-monash/Gia-Phat-Hoang/refs/heads/main/homework%20week%2010.json";
+    const otherLink = "https://raw.githubusercontent.com/hoanggiaphat-monash/Gia-Phat-Hoang/refs/heads/main/Task%201.json";
+
+    async function embedFromUrl(container, url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch: ' + res.status);
+        const spec = await res.json();
+        await vegaEmbed(container, spec, { actions: { export: true, source: true, compiled: false } });
+      } catch (err) {
+        document.querySelector(container).innerHTML =
+          '<div style="padding:16px;color:#900">Error loading visualization. Please replace the placeholder link with your raw GitHub JSON URL.<br><small>' + err.message + '</small></div>';
+        console.error(err);
+      }
+    }
+
+    embedFromUrl('#map', mapLink);
+    embedFromUrl('#other', otherLink);
+  </script>
+</body>
+</html>
